@@ -46,7 +46,7 @@ export default function Sidebar({ apiKey, database }) {
         }
       });
     }, [data, setData]),
-    []
+    [setData]
   );
 
   //for deleting the item
@@ -99,7 +99,6 @@ export default function Sidebar({ apiKey, database }) {
                 <button
                   onClick={() => {
                     deleteItem(dateTime);
-                    window.location.reload();
                   }}
                 >
                   <FaRegWindowClose />

@@ -4,6 +4,8 @@ import { useGlobalContext } from "./context";
 import Sidebar from "./sidebar";
 import { ref, onValue } from "firebase/database";
 
+var markerList = [];
+
 export default function MapSetUp({
   centerCoordinates = [79.8083, 11.9416],
   apiKey,
@@ -24,13 +26,12 @@ export default function MapSetUp({
       return onValue(query, (snapshot) => {
         const data = snapshot.val();
         if (snapshot.exists()) {
-          Object.values(data).map((current) => {
-            setCoordinates((coordinates) => [...coordinates, current]);
-          });
+          let values = Object.values(data);
+          setCoordinates(values);
         }
       });
     }, [coordinates, setCoordinates]),
-    []
+    [setCoordinates]
   );
 
   useEffect(() => {
@@ -60,6 +61,13 @@ export default function MapSetUp({
   }, []);
 
   useEffect(() => {
+    //removing the previous markers
+    if (markerList.length != 0) {
+      markerList.forEach((marker) => {
+        marker.remove();
+      });
+      markerList = [];
+    }
     coordinates.forEach((item) => {
       const { lat, long } = item;
       if (lat && long) {
@@ -70,6 +78,8 @@ export default function MapSetUp({
               .setHTML(`<p>Need help !!!</p>`)
           )
           .addTo(map.current);
+        //adding the markers to the array
+        markerList.push(markerItem);
       }
     });
   }, [coordinates]);
