@@ -70,29 +70,35 @@ export default function Sidebar({ apiKey, database }) {
           if (!lat || !long) {
             return;
           }
-          let temp = new Date(dateTime).getTime();
-          let dttime24 = String(new Date(temp + 19800000)).replace(
-            "GMT+0530 (India Standard Time)",
-            ""
-          );
+          let time = new Date(dateTime);
+          let hours =
+            time.getHours() > 12 ? time.getHours() - 12 : time.getHours();
+          hours = hours < 10 ? "0" + hours : hours;
+          let AMPM = time.getHours() >= 12 ? "PM" : "AM";
+          let minutes =
+            time.getMinutes() < 10
+              ? "0" + time.getMinutes()
+              : time.getMinutes();
+          let seconds =
+            time.getSeconds() < 10
+              ? "0" + time.getSeconds()
+              : time.getSeconds();
 
-          //to local time
-          let dttime12 = new Date(dttime24).toLocaleTimeString("en-US", {
-            timeZone: "IST",
-            hour12: true,
-            month: "numeric",
-            year: "numeric",
-            day: "numeric",
-            hour: "numeric",
-            minute: "numeric",
-            second: "numeric",
-          });
+          let date =
+            time.getDate() < 10 ? "0" + time.getDate() : time.getDate();
+          let month =
+            time.getMonth() + 1 < 10
+              ? "0" + (time.getMonth() + 1)
+              : time.getMonth() + 1;
+          let year = time.getFullYear();
+
+          let finalTime = `${date}/${month}/${year} ${hours}:${minutes}:${seconds} ${AMPM}`;
 
           let place = places[index];
 
           return (
-            <div className="recent-item" key={temp}>
-              <p className="date">{dttime12}</p>
+            <div className="recent-item" key={time}>
+              <p className="date">{finalTime}</p>
               <p className="place">{place}</p>
 
               <span className="remove-item">
