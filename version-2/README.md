@@ -38,4 +38,4 @@ Then the location is stored in a realtime database and then it is shown in map.
 
 **Database:** Firebase
 
-**Hosting:** Vercel
+**Hosting:** Netlify
